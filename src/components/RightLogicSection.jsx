@@ -25,15 +25,17 @@ const DATA = [
   {
     title: "Right Gift",
     sub:
-      "Our AI ✦ Agent will match the perfect gift, find the right address to deliver & make them feel special, so you can monetize that delight!",
-    desc: "Leveraging all CRM activities, call records, external information from Linkedin etc. our AI agent will continuously build a pscychographic profile using 14+ signals and suggest the perfect gift within your catalog and budget",
+      "Our AI ✦ Agent will match the perfect gift, find the right address to deliver & make them feel special.",
+    desc:
+      "Leveraging CRM activities, call records, Linkedin etc.",
     image: img2,
   },
   {
     title: "Right Person",
     sub:
-      "DelightDiscover AI✦ Agent will find the ideal customer personas in desired target accounts who have high intent to buy. No Guesswork or wasted resources",
-    desc: "While every lead, prospect & customer could use a special nudge with a physical gift, the AI agent will prioritize the ones who will yield the highest Gift ROI.",
+      "DelightDiscover AI✦ Agent will find the ideal customer personas.",
+    desc:
+      "The AI agent prioritizes highest Gift ROI personas.",
     image: img3,
   },
 ];
@@ -54,7 +56,7 @@ const RightLogicAnimated = () => {
 
   return (
     <section className="bg-white">
-      {/* ===== NORMAL HEADING (NOT STICKY) ===== */}
+      {/* ===== HEADING ===== */}
       <div className="max-w-5xl mx-auto text-center py-12 px-6">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
           Automated Gifting Portals are so <br className="hidden sm:block" />
@@ -66,62 +68,77 @@ const RightLogicAnimated = () => {
         </p>
       </div>
 
-      {/* ===== SCROLL ZONE ===== */}
-      <div ref={scrollRef} className="relative h-[140vh]">
-        {/* ===== STICKY CONTENT ===== */}
+      {/* ================= DESKTOP (ANIMATED) ================= */}
+      <div
+        ref={scrollRef}
+        className="relative hidden md:block"
+        style={{ height: `${(DATA.length - 1) * 100}vh` }}
+      >
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <motion.div style={{ x }} className="flex w-[200vw]">
+          <motion.div style={{ x }} className="flex w-[300vw]">
             {DATA.map((item, index) => (
               <div
                 key={index}
                 className="w-screen flex items-center justify-center px-20"
               >
-                <div className="grid md:grid-cols-2 gap-20 max-w-7xl items-center">
-                  {/* TEXT */}
-                  <div>
-                    <h2 className="text-5xl font-bold mb-6">
-                      {item.title}
-                    </h2>
-
-                    <p className="text-xl font-semibold text-gray-800 mb-4">
-                      {item.sub}
-                    </p>
-
-                    <p className="text-lg text-gray-700 mb-6 max-w-xl">
-                      {item.desc}
-                    </p>
-
-                    {item.bullets && (
-                      <ul className="space-y-3">
-                        {item.bullets.map((b, i) => (
-                          <li
-                            key={i}
-                            className="flex items-start gap-3 text-lg text-gray-700"
-                          >
-                            <Check className="mt-1 h-5 w-5 text-indigo-600" />
-                            {b}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-
-                  {/* IMAGE */}
-                  <div className="flex justify-center">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full max-w-md drop-shadow-xl"
-                    />
-                  </div>
-                </div>
+                <Content item={item} />
               </div>
             ))}
           </motion.div>
         </div>
       </div>
+
+      {/* ================= MOBILE (STATIC) ================= */}
+      <div className="md:hidden px-6 space-y-24">
+        {DATA.map((item, index) => (
+          <Content key={index} item={item} />
+        ))}
+      </div>
     </section>
   );
 };
+
+/* ===== REUSABLE CONTENT ===== */
+const Content = ({ item }) => (
+  <div className="grid md:grid-cols-2 gap-12 max-w-7xl mx-auto items-center">
+    {/* TEXT */}
+    <div>
+      <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        {item.title}
+      </h2>
+
+      <p className="text-xl font-semibold text-gray-800 mb-4">
+        {item.sub}
+      </p>
+
+      <p className="text-lg text-gray-700 mb-6 max-w-xl">
+        {item.desc}
+      </p>
+
+      {item.bullets && (
+        <ul className="space-y-3">
+          {item.bullets.map((b, i) => (
+            <li
+              key={i}
+              className="flex items-start gap-3 text-lg text-gray-700"
+            >
+              <Check className="mt-1 h-5 w-5 text-indigo-600" />
+              {b}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    {/* IMAGE */}
+    <div className="flex justify-center">
+      <img
+        src={item.image}
+        alt={item.title}
+        className="w-full max-w-md drop-shadow-xl"
+      />
+    </div>
+  </div>
+);
 
 export default RightLogicAnimated;
