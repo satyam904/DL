@@ -17,7 +17,7 @@ const SECTION_1 = {
   items: [
     {
       title: "We run everything for you so you can focus on generating more revenue.",
-      desc: "",
+      desc: "We can source, negotiate, procure your favroite collection of gifts globally. We can store your collection in our global warehouses in US, Asia or Europe for faster delivery or help you manage your own inventory.",
     },
     {
       title: "Improve Deliverability by 3x.",
@@ -26,7 +26,7 @@ const SECTION_1 = {
     },
     {
       title: "Gifting ROI with CTA Tracking",
-      desc: "",
+      desc: "Its not just enough to deliver the gift, its important we track acknowledgement of receipt through CTAs. It updates the Lead score in CRM to analyzes Gifting ROI for better investment decisions",
     },
   ],
 };
@@ -38,7 +38,7 @@ const SECTION_2 = {
   items: [
     {
       title: "From hand written notes to creating custom gift packs – you are covered!",
-      desc: "",
+      desc: "We can source, negotiate, procure your favroite collection of gifts globally. We can store your collection in our global warehouses in US, Asia or Europe for faster delivery or help you manage your own inventory.",
     },
     {
       title: "Launch Campaigns",
@@ -47,7 +47,7 @@ const SECTION_2 = {
     },
     {
       title: "We've got you!",
-      desc: "",
+      desc: "Our Gift Operations Team (GOT) can handle anything from digital gifts to gift cards, from custom media on tablets to physical gifts on top of an already extensive catalog of curated items. ",
     },
   ],
 };
