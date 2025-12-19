@@ -8,129 +8,125 @@ import img4 from "../assets/image4.avif";
 import img5 from "../assets/image5.avif";
 import img6 from "../assets/image6.avif";
 
-const SECTION_1 = [
-  {
-    title: "Automated Gifting Operations",
-    subtitle: "Sending gifts is cool, managing its operations is not!",
-    desc: "We run everything for you so you can focus on generating more revenue.",
-    image: img1,
-  },
-  {
-    title: "Improve Deliverability by 3x",
-    subtitle: "Global warehouses & smart logistics",
-    desc: "AI based address validation & accuracy improves success rate.",
-    image: img2,
-  },
-  {
-    title: "Gifting ROI with CTA Tracking",
-    subtitle: "Track acknowledgement & impact",
-    desc: "Track CTA acknowledgements & ROI inside CRM.",
-    image: img3,
-  },
-];
+/* ================= DATA ================= */
 
-const SECTION_2 = [
-  {
-    title: "Human + AI ✨",
-    subtitle: "Hyper personalization with human touch",
-    desc: "From handwritten notes to custom gift packs – we handle everything.",
-    image: img4,
-  },
-  {
-    title: "Launch Campaigns",
-    subtitle: "Perfect giveaways at perfect time",
-    desc: "Launch new products & campaigns with curated gifting.",
-    image: img5,
-  },
-  {
-    title: "We've got you!",
-    subtitle: "End-to-end execution",
-    desc: "From digital gifts to physical kits — GOT team handles all.",
-    image: img6,
-  },
-];
+const SECTION_1 = {
+  heading: "Automated Gifting Operations",
+  subheading: "Sending gifts is cool, managing its operations is not!",
+  imageList: [img1, img2, img3],
+  items: [
+    {
+      title: "We run everything for you so you can focus on generating more revenue.",
+      desc: "",
+    },
+    {
+      title: "Improve Deliverability by 3x.",
+      desc:
+        "AI Agent not only does Address verification & Accuracy but will initiate a conversational bot with the customer in case of missing address and low delivery confidence score.",
+    },
+    {
+      title: "Gifting ROI with CTA Tracking",
+      desc: "",
+    },
+  ],
+};
+
+const SECTION_2 = {
+  heading: "Human + AI ✨",
+  subheading: "Hyper personalization with human touch",
+  imageList: [img4, img5, img6],
+  items: [
+    {
+      title: "From hand written notes to creating custom gift packs – you are covered!",
+      desc: "",
+    },
+    {
+      title: "Launch Campaigns",
+      desc:
+        "Whether you are launching a new product or a new business, we will find the perfect giveaway.",
+    },
+    {
+      title: "We've got you!",
+      desc: "",
+    },
+  ],
+};
 
 const AUTO_TIME = 5000;
 
+/* ================= BLOCK ================= */
+
 const AccordionBlock = ({ data, reverse }) => {
   const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    setProgress(0);
-    const step = 100 / (AUTO_TIME / 100);
+    const timer = setInterval(() => {
+      setActive((a) => (a + 1) % data.items.length);
+    }, AUTO_TIME);
 
-    const interval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) {
-          setActive((a) => (a + 1) % data.length);
-          return 0;
-        }
-        return p + step;
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [active, data.length]);
+    return () => clearInterval(timer);
+  }, [data.items.length]);
 
   return (
-    <div
-      className={`grid md:grid-cols-2 gap-16 items-center mb-40 ${
-        reverse ? "md:flex-row-reverse" : ""
-      }`}
-    >
+    <div className="grid md:grid-cols-2 gap-16 items-start mb-0">
       {/* TEXT */}
       <div className={reverse ? "md:order-2" : ""}>
-        {data.map((item, i) => (
-          <div
-            key={i}
-            onClick={() => setActive(i)}
-            className="cursor-pointer border-b py-6"
-          >
-            <div className="flex justify-between items-center">
-              <h3 className="text-2xl font-semibold">{item.title}</h3>
-              <span>{active === i ? "−" : "+"}</span>
+        {/* BIG HEADING */}
+        <h2 className="text-5xl font-bold text-gray-900 leading-tight">
+          {data.heading}
+        </h2>
+
+        {/* SUB HEADING */}
+        <p className="mt-4 text-xl text-gray-500">
+          {data.subheading}
+        </p>
+
+        {/* ACCORDION */}
+        <div className="mt-10">
+          {data.items.map((item, i) => (
+            <div
+              key={i}
+              onClick={() => setActive(i)}
+              className="cursor-pointer border-t py-6"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-semibold text-gray-900 max-w-[90%]">
+                  {item.title}
+                </h3>
+                <span className="text-3xl text-gray-400">
+                  {active === i ? "−" : "+"}
+                </span>
+              </div>
+
+              <AnimatePresence>
+                {active === i && item.desc && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-4 text-gray-600 leading-relaxed"
+                  >
+                    {item.desc}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
-
-            <AnimatePresence>
-              {active === i && (
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="mt-4"
-                >
-                  <p className="text-gray-600">{item.subtitle}</p>
-                  <p className="mt-2 text-gray-500">{item.desc}</p>
-
-                  {/* 🔥 TIMER LINE (KEY ADDED) */}
-                  <div className="mt-4 h-[3px] bg-gray-200 overflow-hidden rounded">
-                    <motion.div
-                      key={active}
-                      className="h-full bg-purple-600"
-                      animate={{ width: `${progress}%` }}
-                      transition={{ ease: "linear" }}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* IMAGE */}
       <div className={`sticky top-28 ${reverse ? "md:order-1" : ""}`}>
         <AnimatePresence mode="wait">
           <motion.img
-            key={data[active].image}
-            src={data[active].image}
+            key={data.imageList[active]}
+            src={data.imageList[active]}
             className="rounded-2xl shadow-xl w-full max-w-[420px] mx-auto"
-            initial={{ opacity: 0, scale: 0.96 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45 }}
+            transition={{ duration: 0.4 }}
           />
         </AnimatePresence>
       </div>
@@ -138,13 +134,15 @@ const AccordionBlock = ({ data, reverse }) => {
   );
 };
 
+/* ================= MAIN ================= */
+
 const FeatureAccordion = () => {
   return (
-    <section className="relative overflow-hidden pt-20 pb-1">
-      {/* WHITE GRID BACKGROUND */}
+    <section className="relative overflow-hidden pt-24 pb-10">
+      {/* GRID BACKGROUND */}
       <div className="absolute inset-0 bg-white" />
       <div
-        className="absolute inset-0 opacity-[0.25]"
+        className="absolute inset-0 opacity-[0.2]"
         style={{
           backgroundImage:
             "linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)",
@@ -152,22 +150,19 @@ const FeatureAccordion = () => {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        {/* HEADING */}
+      <div className="relative max-w-7xl mx-auto px-2">
+        {/* TOP HEADING */}
         <div className="text-center mb-32">
           <h2 className="text-4xl md:text-5xl font-bold">
             Fill up Your Sales Pipeline & <br />
             Accelerate Closure Predictably
           </h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt- text-gray-600">
             Our Gifting Platform is packed with features customers love.
           </p>
         </div>
 
-        {/* SECTION 1 */}
         <AccordionBlock data={SECTION_1} />
-
-        {/* SECTION 2 */}
         <AccordionBlock data={SECTION_2} reverse />
       </div>
     </section>
