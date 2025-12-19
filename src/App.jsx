@@ -10,6 +10,7 @@ import FeatureAccordion from './components/FeatureAccordion.jsx'
 import AnimatedCTA from './components/AnimatedCTA.jsx'
 import Footer from './components/Footer.jsx'
 import RightTeamSection from './components/righttimesection.jsx'
+import RightLogicSection from './components/RightLogicSection.jsx'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <Features/>
       <RightTeamSection/>
       {/* <RightFlowSection/> */}
+      <RightLogicSection/>
       <FeatureAccordion/>
       <IntegrationSection/>
       <AnimatedCTA/>

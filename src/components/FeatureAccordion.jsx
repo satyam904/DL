@@ -16,17 +16,20 @@ const SECTION_1 = {
   imageList: [img1, img2, img3],
   items: [
     {
-      title: "We run everything for you so you can focus on generating more revenue.",
-      desc: "We can source, negotiate, procure your favroite collection of gifts globally. We can store your collection in our global warehouses in US, Asia or Europe for faster delivery or help you manage your own inventory.",
+      title:
+        "We run everything for you so you can focus on generating more revenue.",
+      desc:
+        "We source, store and deliver gifts globally using our warehouse network.",
     },
     {
       title: "Improve Deliverability by 3x.",
       desc:
-        "AI Agent not only does Address verification & Accuracy but will initiate a conversational bot with the customer in case of missing address and low delivery confidence score.",
+        "AI validates addresses and starts conversations if delivery confidence is low.",
     },
     {
       title: "Gifting ROI with CTA Tracking",
-      desc: "Its not just enough to deliver the gift, its important we track acknowledgement of receipt through CTAs. It updates the Lead score in CRM to analyzes Gifting ROI for better investment decisions",
+      desc:
+        "Track acknowledgements and update CRM lead scores for better ROI decisions.",
     },
   ],
 };
@@ -37,24 +40,51 @@ const SECTION_2 = {
   imageList: [img4, img5, img6],
   items: [
     {
-      title: "From hand written notes to creating custom gift packs – you are covered!",
-      desc: "We can source, negotiate, procure your favroite collection of gifts globally. We can store your collection in our global warehouses in US, Asia or Europe for faster delivery or help you manage your own inventory.",
+      title:
+        "From hand written notes to creating custom gift packs – you are covered!",
+      desc:
+        "We manage sourcing, packing and execution end-to-end.",
     },
     {
       title: "Launch Campaigns",
       desc:
-        "Whether you are launching a new product or a new business, we will find the perfect giveaway.",
+        "Launch new products or campaigns with curated gifting experiences.",
     },
     {
       title: "We've got you!",
-      desc: "Our Gift Operations Team (GOT) can handle anything from digital gifts to gift cards, from custom media on tablets to physical gifts on top of an already extensive catalog of curated items. ",
+      desc:
+        "Our Gift Operations Team handles everything from digital to physical gifts.",
     },
   ],
 };
 
 const AUTO_TIME = 5000;
 
-/* ================= BLOCK ================= */
+/* ================= PURPLE GRID BACKGROUND ================= */
+
+const AnimatedPurpleGrid = () => {
+  return (
+    <motion.div
+      className="absolute inset-0 -z-10"
+      animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+      transition={{
+        duration: 40,
+        ease: "linear",
+        repeat: Infinity,
+      }}
+      style={{
+        backgroundColor: "#faf7ff",
+        backgroundImage: `
+          linear-gradient(to right, rgba(124,58,237,0.12) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(124,58,237,0.12) 1px, transparent 1px)
+        `,
+        backgroundSize: "80px 80px",
+      }}
+    />
+  );
+};
+
+/* ================= ACCORDION BLOCK ================= */
 
 const AccordionBlock = ({ data, reverse }) => {
   const [active, setActive] = useState(0);
@@ -68,38 +98,35 @@ const AccordionBlock = ({ data, reverse }) => {
   }, [data.items.length]);
 
   return (
-    <div className="grid md:grid-cols-2 gap-16 items-start mb-0">
+    <div className="grid md:grid-cols-2 gap-16 items-start mb-28">
       {/* TEXT */}
       <div className={reverse ? "md:order-2" : ""}>
-        {/* BIG HEADING */}
         <h2 className="text-5xl font-bold text-gray-900 leading-tight">
           {data.heading}
         </h2>
 
-        {/* SUB HEADING */}
-        <p className="mt-4 text-xl text-gray-500">
+        <p className="mt-4 text-xl text-gray-600">
           {data.subheading}
         </p>
 
-        {/* ACCORDION */}
         <div className="mt-10">
           {data.items.map((item, i) => (
             <div
               key={i}
               onClick={() => setActive(i)}
-              className="cursor-pointer border-t py-6"
+              className="cursor-pointer border-t border-purple-200 py-6"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-semibold text-gray-900 max-w-[90%]">
                   {item.title}
                 </h3>
-                <span className="text-3xl text-gray-400">
+                <span className="text-3xl text-purple-400">
                   {active === i ? "−" : "+"}
                 </span>
               </div>
 
               <AnimatePresence>
-                {active === i && item.desc && (
+                {active === i && (
                   <motion.p
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -138,26 +165,18 @@ const AccordionBlock = ({ data, reverse }) => {
 
 const FeatureAccordion = () => {
   return (
-    <section className="relative overflow-hidden pt-24 pb-10">
-      {/* GRID BACKGROUND */}
-      <div className="absolute inset-0 bg-white" />
-      <div
-        className="absolute inset-0 opacity-[0.2]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)",
-          backgroundSize: "90px 90px",
-        }}
-      />
+    <section className="relative overflow-hidden pt-24 pb-16">
+      {/* 💜 PURPLE GRID BACKGROUND */}
+      <AnimatedPurpleGrid />
 
-      <div className="relative max-w-7xl mx-auto px-2">
+      <div className="relative max-w-7xl mx-auto px-6">
         {/* TOP HEADING */}
-        <div className="text-center mb-32">
-          <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="text-center mb-28">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
             Fill up Your Sales Pipeline & <br />
             Accelerate Closure Predictably
           </h2>
-          <p className="mt- text-gray-600">
+          <p className="mt-4 text-gray-700">
             Our Gifting Platform is packed with features customers love.
           </p>
         </div>

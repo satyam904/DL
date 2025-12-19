@@ -57,7 +57,7 @@ const TABS = [
   },
 ];
 
-const AUTO_CHANGE_TIME = 9000; // ⏱️ 5 seconds
+const AUTO_CHANGE_TIME = 2000;
 
 const Features = () => {
   const [active, setActive] = useState(0);
