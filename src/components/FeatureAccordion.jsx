@@ -19,17 +19,17 @@ const SECTION_1 = {
       title:
         "We run everything for you so you can focus on generating more revenue.",
       desc:
-        "We source, store and deliver gifts globally using our warehouse network.",
+        "We can source, negotiate, procure your favroite collection of gifts globally. We can store your collection in our global warehouses in US, Asia or Europe for faster delivery or help you manage your own inventory.",
     },
     {
       title: "Improve Deliverability by 3x.",
       desc:
-        "AI validates addresses and starts conversations if delivery confidence is low.",
+        "AI Agent not only does Address verification & Accuracy but will initiate a conversational bot with the customer in case of missing address and low delivery confidence score.",
     },
     {
       title: "Gifting ROI with CTA Tracking",
       desc:
-        "Track acknowledgements and update CRM lead scores for better ROI decisions.",
+        "Its not just enough to deliver the gift, its important we track acknowledgement of receipt through CTAs. It updates the Lead score in CRM to analyzes Gifting ROI for better investment decisions",
     },
   ],
 };
@@ -43,17 +43,17 @@ const SECTION_2 = {
       title:
         "From hand written notes to creating custom gift packs – you are covered!",
       desc:
-        "We manage sourcing, packing and execution end-to-end.",
+        "Our warehouse Gifting Operations team will take care of every details and any special instructions before dispatching the final swag package to each customer.",
     },
     {
       title: "Launch Campaigns",
       desc:
-        "Launch new products or campaigns with curated gifting experiences.",
+        "Whether you are launching a new product or a new business, we will find the perfect giveaway that helps elevate the positioning.",
     },
     {
       title: "We've got you!",
       desc:
-        "Our Gift Operations Team handles everything from digital to physical gifts.",
+        "Our Gift Operations Team (GOT) can handle anything from digital gifts to gift cards, from custom media on tablets to physical gifts on top of an already extensive catalog of curated items. ",
     },
   ],
 };
