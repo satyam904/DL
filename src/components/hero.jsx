@@ -45,29 +45,34 @@ const Hero = () => {
 
         {/* 🔥 HEADING — animated */}
         <motion.h1
-          initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="mb-6 text-4xl font-bold tracking-tight text-gray-900 leading-none sm:text-5xl md:text-6xl lg:text-7xl"
-        >
-          <span>Get More </span>
+  initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+  transition={{ duration: 0.8, ease: "easeOut" }}
+  viewport={{ once: true }}
+  className="mx-auto w-fit mb-6 text-4xl font-bold tracking-tight text-gray-900 leading-[1.02] sm:text-5xl md:text-6xl lg:text-7xl"
+>
+  <span className="inline-flex items-center">
+    <span>Get More</span>
 
-          <span className="relative inline-block h-[0.9em] w-[5ch] overflow-hidden align-baseline">
-            <span
-              className={`inline-block bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent
-              transition-transform transition-opacity duration-500
-              ease-[cubic-bezier(0.16,1,0.3,1)]
-              ${
-                phase === "enter"
-                  ? "translate-y-0 opacity-100"
-                  : "-translate-y-full opacity-0"
-              }`}
-            >
-              {WORDS[index]}
-            </span>
-          </span>
-        </motion.h1>
+    <span className="relative ml-2 inline-block h-[1.07em] w-[5ch] overflow-hidden align-baseline">
+      <span
+        className={`absolute left-0 top-0 inline-block
+          bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent
+          whitespace-nowrap
+          transition-transform transition-opacity duration-500
+          ease-[cubic-bezier(0.16,1,0.3,1)]
+          ${
+            phase === "enter"
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-full opacity-0"
+          }`}
+      >
+        {WORDS[index]}
+      </span>
+    </span>
+  </span>
+</motion.h1>
+
 
         {/* 🔥 DESCRIPTION — animated */}
         <motion.div
@@ -93,22 +98,23 @@ const Hero = () => {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <button className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-purple-700 px-10 py-4 text-lg font-semibold text-white transition hover:-translate-y-1 hover:shadow-xl">
-            Book a Demo
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5-5 5M18 12H6"
-              />
-            </svg>
-          </button>
+          <button className="inline-flex items-center gap-2 rounded-full bg-[#6A41C6] px-10 py-4 text-lg font-semibold text-white transition hover:-translate-y-1 hover:shadow-xl hover:bg-[#5b37ad]">
+  Book a Demo
+  <svg
+    className="h-6 w-6"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M13 7l5 5-5 5M18 12H6"
+    />
+  </svg>
+</button>
+
         </motion.div>
 
       </div>

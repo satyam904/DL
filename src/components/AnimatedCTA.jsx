@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const AnimatedCTA = () => {
   return (
-    <section className="relative overflow-hidden py-40 bg-[#5B2EFF]">
+    <section className="relative overflow-hidden py-15 bg-[#5B2EFF]">
       
       {/* GRID BACKGROUND */}
       <div className="absolute inset-0">

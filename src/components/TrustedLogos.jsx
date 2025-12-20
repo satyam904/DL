@@ -11,7 +11,7 @@ const logos = [accio, rapid, indiq, incubate, ipl, graphite];
 
 const TrustedLogos = () => {
   return (
-    <section className="relative mt-12 overflow-hidden py-10">
+    <section className="relative mt-32 overflow-hidden py-6">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100" />
 
       <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />

@@ -65,7 +65,7 @@ const RightLogicAnimated = () => {
   return (
     <section className="bg-white">
       {/* ---------- HEADING ---------- */}
-      <div className="max-w-4xl mx-auto px-6 text-center pt-24 pb-12">
+      <div className="max-w-4xl mx-auto px-6 text-center pt-24 pb-0 -mb-19">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           Automated Gifting Portals are so <br className="hidden sm:block" />
           2024..
