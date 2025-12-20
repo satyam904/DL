@@ -54,7 +54,16 @@ const Hero = () => {
   <span className="inline-flex items-center">
     <span>Get More</span>
 
-    <span className="relative ml-2 inline-block h-[1.07em] w-[5ch] overflow-hidden align-baseline">
+    <span
+  className="
+    relative ml-2 inline-flex items-center
+    h-[1.1em] w-[6.5ch]          /* 📱 mobile safe */
+    sm:h-[1.1em] sm:w-[6ch]     /* tablet */
+    lg:h-[1.07em] lg:w-[5ch]    /* desktop (original) */
+    overflow-hidden
+  "
+>
+
       <span
         className={`absolute left-0 top-0 inline-block
           bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent

@@ -14,39 +14,41 @@ const HeroVideo = () => {
      PHASED SCROLL ANIMATION
   ===================================================== */
 
-  // 🔹 Phase 1: Entry → center (small → medium)
   const width = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.7],
-    ["55vw", "70vw", "100vw"] // center tak aate aate bada
+    [0, 0, 0.7],
+    ["55vw", "70vw", "100vw"]
   );
 
-  // 🔹 Height grows into full screen
   const height = useTransform(
     scrollYProgress,
     [0, 0, 0.7],
     ["38vw", "38vw", "100vh"]
   );
 
-  // 🔹 Zoom feel after center
   const scale = useTransform(
     scrollYProgress,
     [0, 0, 0.7],
     [0.9, 1, 1.05]
   );
 
-  // 🔹 Rounded → sharp when fullscreen
   const radius = useTransform(
     scrollYProgress,
     [0, 0, 0.7],
     [34, 26, 0]
   );
 
-  // 🔹 Bottom text fade out
+  // ✅ FIXED: opacity + move text UNDER video
   const bottomTextOpacity = useTransform(
     scrollYProgress,
-    [0.35, 0.5],
-    [100, 0]
+    [0.3, 0.5],
+    [1, 0]
+  );
+
+  const bottomTextY = useTransform(
+    scrollYProgress,
+    [0.3, 0.5],
+    [0, -60]
   );
 
   return (
@@ -59,16 +61,15 @@ const HeroVideo = () => {
 
       {/* TOP TEXT */}
       <motion.h2
-  initial={{ opacity: 0.6 }}
-  animate={{ opacity: [0.6, 1, 0.6] }}
-  transition={{ duration: 2.5, repeat: Infinity }}
-  className="mb-6 text-center text-2xl font-bold sm:text-3xl text-[#6A41C6] drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]"
->
-  Launching DelightLoop 2.0!
-</motion.h2>
+        initial={{ opacity: 0.6 }}
+        animate={{ opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 2.5, repeat: Infinity }}
+        className="mb-6 text-center text-2xl font-bold sm:text-3xl text-[#6A41C6]"
+      >
+        Launching DelightLoop 2.0!
+      </motion.h2>
 
-
-      {/* ================= MOBILE (STATIC) ================= */}
+      {/* ================= MOBILE ================= */}
       <div className="md:hidden relative z-10">
         <div className="aspect-video overflow-hidden rounded-2xl shadow-xl">
           <video
@@ -83,14 +84,9 @@ const HeroVideo = () => {
       </div>
 
       {/* ================= DESKTOP (SCROLL TAKEOVER) ================= */}
-      <div className="hidden md:flex sticky top-0 h-screen items-center justify-center z-10">
+      <div className="hidden md:flex sticky top-0 h-screen items-center justify-center z-20">
         <motion.div
-          style={{
-            width,
-            height,
-            scale,
-            borderRadius: radius,
-          }}
+          style={{ width, height, scale, borderRadius: radius }}
           className="bg-black overflow-hidden shadow-2xl ring-1 ring-black/10"
         >
           <video
@@ -104,14 +100,17 @@ const HeroVideo = () => {
         </motion.div>
       </div>
 
-      {/* BOTTOM TEXT */}
+      {/* ✅ BOTTOM TEXT (STAYS BELOW, HIDES UNDER VIDEO) */}
       <motion.div
-        style={{ opacity: bottomTextOpacity }}
-        className="relative z-20 mt-12 text-center hidden md:block"
+        style={{
+          opacity: bottomTextOpacity,
+          y: bottomTextY,
+        }}
+        className="relative z-10 mt-12 text-center hidden md:block"
       >
-        <h1 className="text-xl md:text-2xl font-medium text-gray-600">
+        <h1 className="text-2xl md:text-2xl font-medium text-black-600">
           <b>Sales, Marketing & Revenue teams who trust </b>
-          <span className="font-semibold text-gray-800">DelightLoop</span>
+          <span className="font-semibold text-black-800">DelightLoop</span>
         </h1>
       </motion.div>
 

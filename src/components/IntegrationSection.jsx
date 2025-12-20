@@ -40,16 +40,14 @@ const IntegrationSection = () => {
           </p>
         </div>
 
-        {/* RIGHT ORBIT */}
-        <div className="relative w-[320px] h-[320px] mx-auto">
-          
-          {/* ROTATING GROUP */}
+        {/* ===================== DESKTOP ROTATION (UNCHANGED) ===================== */}
+        <div className="relative w-[320px] h-[320px] mx-auto hidden lg:block">
           <motion.div
             className="absolute inset-0"
             animate={{ rotate: 360 }}
             transition={{
               repeat: Infinity,
-              duration: 30, 
+              duration: 30,
               ease: "linear",
             }}
           >
@@ -79,8 +77,35 @@ const IntegrationSection = () => {
               );
             })}
           </motion.div>
-
         </div>
+
+        {/* ===================== MOBILE SLIDING LOGOS ===================== */}
+        <div className="lg:hidden overflow-hidden">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: ["0%", "-100%"] }}
+            transition={{
+              repeat: Infinity,
+              duration: 18,
+              ease: "linear",
+            }}
+          >
+            {/* duplicate logos for seamless loop */}
+            {[...logos, ...logos].map((logo, index) => (
+              <div
+                key={index}
+                className="min-w-[64px] h-16 bg-white rounded-xl shadow-md flex items-center justify-center"
+              >
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="w-8 h-8 object-contain"
+                />
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
       </div>
     </section>
   );
