@@ -3,15 +3,16 @@ import {
   motion,
   useScroll,
   useTransform,
-  useMotionValue,
   useSpring,
+  useReducedMotion,
 } from "framer-motion";
 import heroVideo from "../assets/video.mp4";
 
 const HeroVideo = () => {
   const sectionRef = useRef(null);
   const mobileVideoRef = useRef(null);
-  const desktopWrapRef = useRef(null);
+
+  const reduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -53,19 +54,34 @@ const HeroVideo = () => {
   );
 
   // bottom text opacity + basic move
-  const bottomTextOpacity = useTransform(scrollYProgress, [0.55, 0.72, 0.85], [0, 1, 0.95]);
-  const bottomTextY = useTransform(scrollYProgress, [0.55, 0.72, 0.85], [28, 0, -12]);
+  const bottomTextOpacity = useTransform(
+    scrollYProgress,
+    [0.55, 0.72, 0.85],
+    [0, 1, 0.95]
+  );
+  const bottomTextY = useTransform(
+    scrollYProgress,
+    [0.55, 0.72, 0.85],
+    [28, 0, -12]
+  );
 
   // Extra small offset so text sits right under the video end
-  // when video expands to full height (around 0.7)
-  const bottomTextOffset = useTransform(scrollYProgress, [0.6, 0.7, 0.85], [60, 0, -20]);
+  const bottomTextOffset = useTransform(
+    scrollYProgress,
+    [0.6, 0.7, 0.85],
+    [60, 0, -20]
+  );
 
-  // Combine with a spring for very smooth motion
-  const smoothBottomY = useSpring(useMotionValue(0));
-  // We'll compute a composed translateY value inside style below using bottomTextY + bottomTextOffset
+  // Combine and smooth bottom text motion
+  const combinedBottomY = useTransform(
+    [bottomTextY, bottomTextOffset],
+    (y, o) => y + o
+  );
+  const smoothBottomY = useSpring(combinedBottomY, { stiffness: 120, damping: 18 });
 
   /* =====================================================
-     MOBILE VIDEO SMOOTH POPUP ANIMATION (unchanged)
+     MOBILE VIDEO SMOOTH POPUP ANIMATION (tilt REMOVED on mobile)
+     - We smooth scale & y with springs to make transitions gentler
   ===================================================== */
 
   const mobileVideoScale = useTransform(
@@ -73,24 +89,15 @@ const HeroVideo = () => {
     [0, 0.35, 0.5, 1],
     [0.6, 0.95, 1.15, 1.05]
   );
-
   const mobileVideoY = useTransform(
     mobileScrollProgress,
     [0, 0.35, 0.5, 1],
     [60, 0, -15, -80]
   );
 
-  const mobileVideoRotateX = useTransform(
-    mobileScrollProgress,
-    [0, 0.35, 0.5, 1],
-    [0, 8, 0, -15]
-  );
-
-  const mobileVideoRotateZ = useTransform(
-    mobileScrollProgress,
-    [0, 0.35, 0.5, 1],
-    [0, 2, 0, -8]
-  );
+  // Smooth mobile transforms (makes animation softer)
+  const smoothMobileScale = useSpring(mobileVideoScale, { stiffness: 120, damping: 24 });
+  const smoothMobileY = useSpring(mobileVideoY, { stiffness: 120, damping: 24 });
 
   const mobileVideoOpacity = useTransform(
     mobileScrollProgress,
@@ -132,9 +139,11 @@ const HeroVideo = () => {
           opacity: topTextOpacity,
           y: topTextY,
         }}
-        className="mb-2 md:mb-0 pt-28 text-center text-2xl font-bold sm:text-3xl text-[#6A41C6] relative z-10 md:z-0 hidden md:block md:!opacity-100 md:mt-2"
+        className="hidden md:block pt-32 mb-6 text-center text-3xl font-extrabold relative z-10"
       >
-        Launching DelightLoop 2.0!
+        <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 bg-[length:200%_200%] bg-clip-text text-transparent animate-gradient">
+          Launching DelightLoop 2.0!
+        </span>
       </motion.h2>
 
       <motion.h2
@@ -150,7 +159,7 @@ const HeroVideo = () => {
         Launching DelightLoop 2.0!
       </motion.h2>
 
-      {/* ================= MOBILE (unchanged) ================= */}
+      {/* ================= MOBILE ================= */}
       <motion.div
         ref={mobileVideoRef}
         className="md:hidden relative z-10"
@@ -159,14 +168,13 @@ const HeroVideo = () => {
         }}
       >
         <motion.div
-          className="aspect-video overflow-hidden shadow-2xl max-w-2xl mx-auto"
+          className="aspect-video overflow-hidden shadow-2xl max-w-2xl mx-auto rounded-lg"
           style={{
-            scale: mobileVideoScale,
-            y: mobileVideoY,
-            rotateX: mobileVideoRotateX,
-            rotateZ: mobileVideoRotateZ,
+            scale: reduced ? 1 : smoothMobileScale,
+            y: reduced ? 0 : smoothMobileY,
             opacity: mobileVideoOpacity,
             borderRadius: mobileVideoBorderRadius,
+            transformOrigin: "center",
           }}
         >
           <video
@@ -201,18 +209,13 @@ const HeroVideo = () => {
       <motion.div
         className="hidden md:flex items-center justify-center z-30"
         style={{
-          // position relative so it flows under the sticky block
           opacity: bottomTextOpacity,
-          transform: `translateY(${/* combine two motion values by approximation */ "0px"})`,
         }}
       >
-        {/* We use another motion wrapper to animate precise y using the transforms */}
         <motion.div
           className="relative z-30 max-w-3xl mx-auto mt-8"
           style={{
-            y: bottomTextY, // primary vertical movement
-            // small offset so the text sits right below the expanded video region
-            translateY: bottomTextOffset,
+            y: smoothBottomY, // smooth combined vertical offset for clean placement
           }}
         >
           <motion.h1
