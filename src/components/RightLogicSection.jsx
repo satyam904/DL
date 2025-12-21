@@ -64,28 +64,28 @@ export default function RightLogicAnimatedResponsive() {
           }
         });
       },
-      { rootMargin: "-50% 0px -50% 0px" } // center detection
+      { rootMargin: "-50% 0px -50% 0px" }
     );
 
     refs.current.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
-  // Optional: subtle tilt on desktop active image (shared values)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [12, -12]);
   const rotateX = useTransform(mouseY, [-0.5, 0.5], [-8, 8]);
+
   const smoothRotateY = useSpring(rotateY, { stiffness: 200, damping: 25 });
   const smoothRotateX = useSpring(rotateX, { stiffness: 200, damping: 25 });
 
   function handleMouseMove(e, container) {
     const rect = container.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(px);
-    mouseY.set(py);
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
   }
+
   function handleMouseLeave() {
     mouseX.set(0);
     mouseY.set(0);
@@ -102,7 +102,6 @@ export default function RightLogicAnimatedResponsive() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.55 }}
-            style={{ display: "inline-block" }}
           >
             2024..
           </motion.span>
@@ -112,38 +111,13 @@ export default function RightLogicAnimatedResponsive() {
         </p>
       </div>
 
-      {/* Mobile dots indicator */}
-      <div className="md:hidden fixed top-20 right-4 z-50">
-        <div className="flex flex-col gap-3 items-center">
-          {DATA.map((_, i) => (
-            <motion.button
-              key={i}
-              onClick={() => {
-                // scroll to the section when dot clicked
-                const el = refs.current[i];
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-              }}
-              initial={{ scale: 1 }}
-              animate={currentIndex === i ? { scale: 1.15 } : { scale: 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 18 }}
-              className={`w-3 h-3 rounded-full ${currentIndex === i ? "bg-indigo-600" : "bg-gray-300"}`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-
       <div className="relative">
         <div
           className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16"
-          // desktop sticky image container handles mouse tilt
-          onMouseMove={(e) => {
-            const el = e.currentTarget;
-            handleMouseMove(e, el);
-          }}
+          onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
           onMouseLeave={handleMouseLeave}
         >
-          {/* LEFT: text blocks (and mobile images above) */}
+          {/* LEFT TEXT */}
           <div>
             {DATA.map((item, i) => (
               <div
@@ -153,26 +127,19 @@ export default function RightLogicAnimatedResponsive() {
                 className="min-h-screen flex items-start md:items-center pt-6 md:pt-0"
               >
                 <div className="w-full">
-                  {/* Mobile image (visible only on small screens) */}
-                  <motion.img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full max-w-sm mx-auto mb-6 rounded-lg shadow-lg block md:hidden"
-                    initial={{ opacity: 0, scale: 0.96, clipPath: "inset(18% 0% 18% 0%)" }}
-                    animate={
-                      currentIndex === i
-                        ? { opacity: 1, scale: 1, clipPath: "inset(0% 0% 0% 0%)" }
-                        : { opacity: 0, scale: 0.96, clipPath: "inset(18% 0% 18% 0%)" }
-                    }
-                    transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-                  />
-
+                  {/* TEXT */}
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
-                    animate={currentIndex === i ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                    animate={
+                      currentIndex === i
+                        ? { opacity: 1, x: 0 }
+                        : { opacity: 0, x: -20 }
+                    }
                     transition={{ duration: 0.45 }}
                   >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">{item.title}</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                      {item.title}
+                    </h2>
                     <p className="text-lg font-semibold mb-3">{item.sub}</p>
                     <p className="text-base mb-4 max-w-xl">{item.desc}</p>
 
@@ -187,30 +154,47 @@ export default function RightLogicAnimatedResponsive() {
                           <motion.li
                             key={idx}
                             variants={liVariant}
-                            whileTap={{ scale: 0.98 }}
                             className="flex gap-3 text-base items-start"
                           >
-                            <motion.span
-                              initial={{ scale: 0.9, opacity: 0 }}
-                              animate={
-                                currentIndex === i ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0 }
-                              }
-                              transition={{ duration: 0.28 }}
-                            >
-                              <Check className="mt-1 h-5 w-5 text-indigo-600" />
-                            </motion.span>
+                            <Check className="mt-1 h-5 w-5 text-indigo-600" />
                             <span>{b}</span>
                           </motion.li>
                         ))}
                       </motion.ul>
                     )}
                   </motion.div>
+
+                  {/* MOBILE IMAGE — NOW BELOW TEXT */}
+                  <motion.img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full max-w-sm mx-auto mt-8 rounded-lg shadow-lg block md:hidden"
+                    initial={{
+                      opacity: 0,
+                      scale: 0.96,
+                      clipPath: "inset(18% 0% 18% 0%)",
+                    }}
+                    animate={
+                      currentIndex === i
+                        ? {
+                            opacity: 1,
+                            scale: 1,
+                            clipPath: "inset(0% 0% 0% 0%)",
+                          }
+                        : {
+                            opacity: 0,
+                            scale: 0.96,
+                            clipPath: "inset(18% 0% 18% 0%)",
+                          }
+                    }
+                    transition={{ duration: 0.45 }}
+                  />
                 </div>
               </div>
             ))}
           </div>
 
-          {/* RIGHT: desktop-only sticky image area */}
+          {/* RIGHT DESKTOP IMAGE */}
           <div className="hidden md:block">
             <div className="sticky top-28 h-screen flex items-center justify-center pointer-events-none">
               {DATA.map((item, idx) => {
@@ -220,34 +204,20 @@ export default function RightLogicAnimatedResponsive() {
                     key={idx}
                     src={item.image}
                     alt={item.title}
-                    initial={{ opacity: 0, scale: 0.94, y: (idx - currentIndex) * 12 }}
                     animate={
                       isActive
-                        ? {
-                            opacity: 1,
-                            scale: 1,
-                            y: 0,
-                            clipPath: "inset(0% 0% 0% 0%)",
-                          }
-                        : {
-                            opacity: 0,
-                            scale: 0.9,
-                            y: (idx - currentIndex) * 12,
-                            clipPath: "inset(12% 0% 12% 0%)",
-                          }
+                        ? { opacity: 1, scale: 1, y: 0 }
+                        : { opacity: 0, scale: 0.9, y: 12 }
                     }
-                    transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
                     style={
                       isActive
                         ? {
                             rotateY: smoothRotateY,
                             rotateX: smoothRotateX,
                             transformPerspective: 900,
-                            zIndex: isActive ? 20 : 10,
                           }
-                        : { zIndex: isActive ? 20 : 10 }
+                        : {}
                     }
-                    whileHover={isActive ? { scale: 1.03 } : {}}
                     className="absolute w-full max-w-md shadow-2xl rounded-lg"
                   />
                 );
