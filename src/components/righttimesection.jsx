@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 const cards = [
   {
@@ -49,9 +50,60 @@ const item = {
   },
 };
 
+// Counter component
+const CounterStat = ({ finalValue, duration = 2 }) => {
+  const [count, setCount] = useState(0);
+  const hasStarted = useRef(false);
+
+  useEffect(() => {
+    if (hasStarted.current) return;
+    hasStarted.current = true;
+
+    let numValue = parseFloat(finalValue);
+    const isPercentage = finalValue.includes("%");
+    const isMultiplier = finalValue.includes("X");
+    
+    if (isPercentage) numValue = parseFloat(finalValue);
+    if (isMultiplier) numValue = parseFloat(finalValue);
+
+    const increment = numValue / (duration * 60);
+    let current = 0;
+
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= numValue) {
+        setCount(numValue);
+        clearInterval(interval);
+      } else {
+        setCount(current);
+      }
+    }, 1000 / 60);
+
+    return () => clearInterval(interval);
+  }, [finalValue, duration]);
+
+  if (finalValue.includes("%")) {
+    return `${Math.round(count)}%`;
+  }
+  if (finalValue.includes("X")) {
+    return `${count.toFixed(1)}X`;
+  }
+  if (finalValue.includes("–")) {
+    return finalValue; // Keep ranges as-is
+  }
+  return Math.round(count);
+};
+
 const RightTeamSection = () => {
+  const sectionRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 80%", "start 20%"],
+  });
+    
   return (
-    <section className="relative overflow-hidden px-4 py-28">
+    <section ref={sectionRef} className="relative overflow-hidden px-4 py-28">
 
       <div className="absolute inset-0 animated-pink-grid" />
       <div className="absolute inset-0 grid-light-flow" />
@@ -89,30 +141,63 @@ const RightTeamSection = () => {
           viewport={{ once: true }}
           className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
         >
-          {cards.map((card, index) => (
-            <motion.div
-              key={index}
-              variants={item}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="rounded-2xl border border-[#E9D5FF] bg-white p-6 text-left shadow-sm hover:shadow-xl"
-            >
-              <h3 className="mb-3 text-lg font-semibold text-[#111827]">
-                {card.title}
-              </h3>
+          {cards.map((card, index) => {
+            const yOffset = useTransform(
+              scrollYProgress,
+              [0, 1],
+              [0, -30 * (index % 2 === 0 ? 1 : -1)]
+            );
+            const [isTouched, setIsTouched] = useState(false);
 
-              <p className="mb-6 text-sm text-[#6B7280]">
-                {card.desc}
-              </p>
+            return (
+              <motion.div
+                key={index}
+                variants={item}
+                style={{ y: yOffset }}
+                whileHover={{ 
+                  y: -12, 
+                  scale: 1.03,
+                  boxShadow: "0 20px 40px rgba(109, 40, 217, 0.3)"
+                }}
+                onTouchStart={() => setIsTouched(true)}
+                onTouchEnd={() => setIsTouched(false)}
+                className={`group rounded-2xl border-2 border-[#E9D5FF] bg-white p-6 text-left shadow-sm transition-all relative overflow-hidden ${
+                  isTouched ? "shadow-2xl" : "hover:shadow-2xl"
+                }`}
+              >
+                {/* Glow effect on hover / touch */}
+                <div className={`absolute inset-0 transition-opacity duration-300 bg-gradient-to-br from-purple-500/10 via-pink-500/5 to-transparent ${
+                  isTouched ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`} />
+                
+                {/* Icon indicator */}
+                <div className="mb-4 inline-flex p-2 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100">
+                  <span className="text-2xl">
+                    {index === 0 && "📅"}
+                    {index === 1 && "🎯"}
+                    {index === 2 && "🤝"}
+                    {index === 3 && "💎"}
+                  </span>
+                </div>
 
-              <div className="text-[#5B21B6] text-4xl font-extrabold">
-                {card.stat}
-              </div>
+                <h3 className="mb-3 text-lg font-semibold text-[#111827] relative z-10">
+                  {card.title}
+                </h3>
 
-              <p className="mt-2 text-sm font-medium text-[#5B21B6]">
-                {card.statText}
-              </p>
-            </motion.div>
-          ))}
+                <p className="mb-6 text-sm text-[#6B7280] relative z-10">
+                  {card.desc}
+                </p>
+
+                <div className="text-[#5B21B6] text-4xl font-extrabold relative z-10">
+                  {card.stat}
+                </div>
+
+                <p className="mt-2 text-sm font-medium text-[#5B21B6] relative z-10">
+                  {card.statText}
+                </p>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

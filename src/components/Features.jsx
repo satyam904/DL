@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 
 // ✅ IMPORT IMAGES (NO SPACES IN FILE NAMES)
 import pipelineImg from "../assets/pipeline.avif";
@@ -61,6 +61,17 @@ const AUTO_CHANGE_TIME = 5000;
 
 const Features = () => {
   const [active, setActive] = useState(0);
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 80%", "start 20%"],
+  });
+
+  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const textY = useTransform(scrollYProgress, [0, 0.3], [40, 0]);
+  const imageOpacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
+  const imageScale = useTransform(scrollYProgress, [0.2, 0.5], [0.9, 1]);
 
   // 🔁 AUTO TAB ROTATION
   useEffect(() => {
@@ -74,7 +85,7 @@ const Features = () => {
   const current = TABS[active];
 
   return (
-    <section className="bg-white px-4 py-24">
+    <section ref={sectionRef} className="bg-white px-4 py-24">
       <div className="mx-auto max-w-7xl">
 
         {/* 🔘 TABS */}
@@ -108,41 +119,70 @@ const Features = () => {
           >
 
             {/* 📝 TEXT */}
-            <div className={current.reverse ? "md:order-2" : "md:order-1"}>
-              <h2 className="mb-4 text-3xl font-extrabold leading-tight text-[#6A41C6]">
+            <motion.div
+              className={current.reverse ? "md:order-2" : "md:order-1"}
+              style={{ opacity: textOpacity, y: textY }}
+            >
+              <motion.h2
+                className="mb-4 text-3xl font-extrabold leading-tight text-[#6A41C6]"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: false, amount: 0.5 }}
+              >
                 {current.title}
-              </h2>
+              </motion.h2>
 
-              <h3 className="mb-6 text-2xl font-bold text-gray-900">
+              <motion.h3
+                className="mb-6 text-2xl font-bold text-gray-900"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: false, amount: 0.5 }}
+              >
                 {current.subtitle}
-              </h3>
+              </motion.h3>
 
-              <p className="mb-8 text-lg text-gray-600">
+              <motion.p
+                className="mb-8 text-lg text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: false, amount: 0.5 }}
+              >
                 {current.desc}
-              </p>
+              </motion.p>
 
               <ul className="space-y-4 text-lg text-gray-700">
-                {current.bullets.map((item) => (
-                  <li key={item} className="flex items-center gap-3">
+                {current.bullets.map((item, idx) => (
+                  <motion.li
+                    key={item}
+                    className="flex items-center gap-3"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + idx * 0.1 }}
+                    viewport={{ once: false, amount: 0.5 }}
+                  >
                     <span className="text-purple-600 text-xl">✓</span>
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* 🖼️ IMAGE */}
-            <div
+            <motion.div
               className={`rounded-2xl border bg-white p-6 shadow-xl ${
                 current.reverse ? "md:order-1" : "md:order-2"
               }`}
+              style={{ opacity: imageOpacity, scale: imageScale }}
             >
               <img
                 src={current.image}
                 alt={current.label}
                 className="h-[360px] w-full rounded-xl object-contain"
               />
-            </div>
+            </motion.div>
 
           </motion.div>
         </AnimatePresence>
